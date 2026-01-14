@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TeamPulse Solutions</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&display=swap');
+
+    :root {
+      --bleu-fonce: #1d2a62;
+      --bleu-pale: #87aece;
+      --vert: #a8c660;
+      --beige: #f1f2f0;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+      background: var(--beige);
+      color: #1a1a1a;
+    }
+
+    sup {
+      font-size: 0.55em;
+      vertical-align: super;
+      line-height: 0;
+      margin-left: 1px;
+    }
+
+    /* ================= NAVIGATION ================= */
+    .topnav {
+      position: sticky;
+      top: 0;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      z-index: 1000;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 1.4rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .logo-img {
+      height: 88px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--bleu-fonce);
+      font-weight: 600;
+    }
+
+    .questionnaire-link {
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 1.2rem;
+      background: var(--bleu-pale);
+      border-radius: 8px;
+      box-shadow: 0 6px 16px rgba(29,42,98,0.25);
+      white-space: nowrap;
+    }
+
+    .lang-switch button {
+      background: none;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      color: var(--bleu-fonce);
+    }
+
+    .active-lang {
+      text-decoration: underline;
+    }
+
+    /* ================= HERO ================= */
+    header.hero {
+      position: relative;
+      text-align: center;
+      padding: 4.5rem 1.5rem;
+      overflow: hidden;
+    }
+
+    header.hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("téléchargement.jpeg");
+      background-size: cover;
+      background-position: center;
+      filter: blur(5px) grayscale(25%) brightness(0.75);
+      transform: scale(1.06);
+      z-index: 0;
+    }
+
+    header.hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(29, 42, 98, 0.62);
+      z-index: 1;
+    }
+
+    header.hero h1,
+    header.hero p {
+      position: relative;
+      z-index: 2;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.55);
+    }
+
+    header.hero h1 {
+      font-size: 3rem;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+    }
+
+    header.hero p {
+      font-size: 2.9rem;
+      color: #f2f6fb;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    /* ================= SECTIONS ================= */
+    section {
+      padding: 4rem 0;
+    }
+
+    .section-inner {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 1.5rem;
+    }
+
+    #definition { background: var(--vert); }
+    #mesures { background: var(--beige); }
+    #pourquoi { background: var(--bleu-pale); }
+
+    h2 {
+      color: var(--bleu-fonce);
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    /* ================= MODALS ================= */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(29,42,98,0.65);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: var(--beige);
+      max-width: 420px;
+      width: 90%;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      text-align: center;
+      position: relative;
+      border-top: 10px solid var(--bleu-pale);
+    }
+
+    .modal-logo {
+      max-width: 220px;
+      margin: 0 auto 1.5rem;
+      display: block;
+    }
+
+    .password-input {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 1.5rem;
+      display: block;
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 2px solid var(--vert);
+      text-align: center;
+    }
+
+    .modal-btn {
+      min-width: 200px;
+      background: var(--vert);
+      color: var(--bleu-fonce);
+      border: none;
+      padding: 0.6rem 1.6rem;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--bleu-fonce);
+    }
+
+    /* ================= FOOTER ================= */
+    footer {
+      background: var(--bleu-fonce);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+
+    footer a {
+      color: var(--vert);
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .footer-logo {
+      height: 50px;
+      margin: 0.6rem auto 0.3rem;
+      display: block;
+      opacity: 0.75;
+    }
+
+    /* ================= MOBILE ================= */
+    @media (max-width: 768px) {
+
+      .logo-img { height: 64px; }
+
+      .questionnaire-link {
+        height: 46px;
+        padding: 0 1rem;
+      }
+
+      header.hero {
+        padding: 3.5rem 1.2rem;
+      }
+
+      header.hero::before {
+        filter: blur(3px) grayscale(35%) brightness(0.75);
+      }
+
+      header.hero::after {
+        background: rgba(29, 42, 98, 0.70);
+      }
+
+      header.hero h1 {
+        font-size: 2.3rem;
+      }
+
+      header.hero p {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ================= NAV ================= -->
+<nav class="topnav">
+  <div class="nav-container">
+    <img id="navLogo" src="TeamPulse_Logo_fr.png" class="logo-img" alt="TeamPulse Logo">
+
+    <ul class="nav-links">
+      <li>
+        <a href="#" id="openPortal" class="questionnaire-link"
+           data-fr="Portail <em>TeamPulse<sup>MC</sup></em>"
+           data-en="<em>TeamPulse<sup>TM</sup></em>Portal">
+          Portail <em>TeamPulse<sup>MC</sup></em>
+        </a>
+      </li>
+      <li>
+        <a href="mailto:teampulsesolutions@stpginc.com"
+           data-fr="Nous joindre"
+           data-en="Contact Us">
+          Nous joindre
+        </a>
+      </li>
+    </ul>
+
+    <div class="lang-switch">
+      <button id="frBtn" class="active-lang">FR</button> |
+      <button id="enBtn">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <h1 data-fr="<em>TeamPulse<sup>MC</sup></em> Solutions"
+      data-en="<em>TeamPulse<sup>TM</sup></em> Solutions"></h1>
+  <p data-fr="Le pouls de votre équipe"
+     data-en="Your Team at a Glance"></p>
+</header>
+
+<!-- ================= DEFINITION ================= -->
+<section id="definition">
+  <div class="section-inner">
+    <h2 data-fr="Qu’est-ce que <em>TeamPulse<sup>MC</sup></em> ?"
+        data-en="What is <em>TeamPulse<sup>TM</sup></em>?"></h2>
+    <ul>
+      <li data-fr="Outil psychométrique standardisé et scientifiquement validé"
+          data-en="Standardized, scientifically validated psychometric tool"></li>
+      <li data-fr="Mesure la dynamique, l’empowerment et la maturité des équipes"
+          data-en="Measures team dynamics, empowerment, and team maturity"></li>
+      <li data-fr="Participation volontaire"
+          data-en="Voluntary participation"></li>
+      <li data-fr="Temps requis pour répondre : environ 12 minutes"
+          data-en="Estimated completion time: approximately 12 minutes"></li>
+      <li data-fr="Confidentiel : résultats agrégés."
+          data-en="Confidential: aggregated results."></li>
+      <li data-fr="Aucune bonne ou mauvaise réponse. Les réponses reflètent la perception des participants."
+          data-en="No right or wrong answers. Responses reflect participants’ perception."></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= MESURES ================= -->
+<section id="mesures">
+  <div class="section-inner">
+    <h2 data-fr="Ce que <em>TeamPulse<sup>MC</sup></em> mesure"
+        data-en="What <em>TeamPulse<sup>TM</sup></em> Measures"></h2>
+
+    <div class="grid">
+      <div class="card">
+        <h3 data-fr="Les 7 fonctions d’empowerment d’une équipe performante"
+            data-en="The 7 Empowerment Functions of a High-Performing Team"></h3>
+        <ul>
+          <li data-fr="Confiance et conflit constructif"
+              data-en="Trust and constructive conflict"></li>
+          <li data-fr="Clarté des rôles et expertise fonctionnelle"
+              data-en="Role clarity and functional expertise"></li>
+          <li data-fr="Engagement, responsabilisation et attention portée aux résultats"
+              data-en="Commitment, Accountability and Attention to Results"></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 data-fr="Maturité de l’équipe" data-en="Team Maturity"></h3>
+        <p data-fr="Évaluée selon trois composantes :"
+           data-en="Assessed across three components:"></p>
+        <ul>
+          <li data-fr="Fondations" data-en="Foundations"></li>
+          <li data-fr="Fonctionnement de l’équipe" data-en="Team Functioning"></li>
+          <li data-fr="Performance durable et empowerment atteint"
+              data-en="Sustainable Performance & Achieved Empowerment"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= POURQUOI ================= -->
+<section id="pourquoi">
+  <div class="section-inner">
+    <h2 data-fr="Pourquoi utiliser <em>TeamPulse<sup>MC</sup></em> ?"
+        data-en="Why Use <em>TeamPulse<sup>TM</sup></em>?"></h2>
+
+    <div class="grid">
+      <div class="card">
+        <ul>
+          <li data-fr="Crée un espace structuré de dialogue au sein des équipes."
+              data-en="Creates a structured space for team dialogue."></li>
+          <li data-fr="Identifie les forces d’équipe et les axes d’amélioration fonctionnels (risques), incluant les écarts de perception."
+              data-en="Identifies team strengths and functional improvement areas (risks), including perception gaps."></li>
+          <li data-fr="Soutient la performance sans compromettre la santé psychologique."
+              data-en="Supports performance without compromising psychological health."></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 data-fr="Rapports personnalisés" data-en="Customized Reports"></h3>
+        <ul>
+          <li data-fr="Équipe" data-en="Team"></li>
+          <li data-fr="Leadership" data-en="Leadership"></li>
+          <li data-fr="Comparatif" data-en="Comparative"></li>
+        </ul>
+
+        <h3 data-fr="Options de débreffage" data-en="Debrief Options"></h3>
+        <ul>
+          <li data-fr="Débreffage individuel avec les leaders"
+              data-en="One-on-one leadership debrief"></li>
+          <li data-fr="Débreffage d’équipe"
+              data-en="Team debrief"></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODAL FR ================= -->
+<div class="modal" id="portalModal">
+  <div class="modal-content">
+    <button class="modal-close">×</button>
+    <img src="TeamPulse_Logo_fr.png" class="modal-logo" alt="TeamPulse MC">
+    <p>
+      Pour avoir accès au <em>TeamPulse<sup>MC</sup></em>, veuillez saisir votre mot de passe :
+    </p>
+    <input type="password" class="password-input" placeholder="Mot de passe">
+    <button class="modal-btn">Accéder</button>
+  </div>
+</div>
+
+<!-- ================= MODAL EN ================= -->
+<div class="modal" id="portalModalEn">
+  <div class="modal-content">
+    <button class="modal-close">×</button>
+    <img src="TeamPulse_Logo_en.png" class="modal-logo" alt="TeamPulse TM">
+    <p>
+      To access <em>TeamPulse<sup>TM</sup></em>, please enter your password:
+    </p>
+    <input type="password" class="password-input" placeholder="Password">
+    <button class="modal-btn">Access</button>
+  </div>
+</div>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <p><strong><em>TeamPulse<sup>MC</sup></em> Solutions</strong></p>
+  <p>📧 <a href="mailto:teampulsesolutions@stpginc.com">teampulsesolutions@stpginc.com</a></p>
+  <img src="Logo STPG.png" class="footer-logo" alt="St-Pierre, Gauthier & Co. Inc.">
+  <p class="small">© St-Pierre, Gauthier & Co. Inc., 2026</p>
+</footer>
+
+<script>
+  const frBtn = document.getElementById("frBtn");
+  const enBtn = document.getElementById("enBtn");
+  const navLogo = document.getElementById("navLogo");
+  const modalFr = document.getElementById("portalModal");
+  const modalEn = document.getElementById("portalModalEn");
+
+  function setLanguage(lang) {
+    document.querySelectorAll("[data-fr]").forEach(el => {
+      el.innerHTML = el.getAttribute(`data-${lang}`);
+    });
+    document.documentElement.lang = lang;
+    frBtn.classList.toggle("active-lang", lang === "fr");
+    enBtn.classList.toggle("active-lang", lang === "en");
+    navLogo.src = lang === "fr"
+      ? "TeamPulse_Logo_fr.png"
+      : "TeamPulse_Logo_en.png";
+  }
+
+  document.getElementById("openPortal").onclick = e => {
+    e.preventDefault();
+    (document.documentElement.lang === "fr"
+      ? modalFr
+      : modalEn).style.display = "flex";
+  };
+
+  document.querySelectorAll(".modal-close").forEach(btn => {
+    btn.onclick = () => {
+      modalFr.style.display = "none";
+      modalEn.style.display = "none";
+    };
+  });
+
+  [modalFr, modalEn].forEach(modal => {
+    modal.onclick = e => {
+      if (e.target === modal) modal.style.display = "none";
+    };
+  });
+
+  frBtn.onclick = () => setLanguage("fr");
+  enBtn.onclick = () => setLanguage("en");
+
+  setLanguage("fr");
+</script>
+
+</body>
+</html>
