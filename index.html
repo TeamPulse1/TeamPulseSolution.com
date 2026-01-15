@@ -502,6 +502,58 @@
 
   setLanguage("fr");
 </script>
+<script>
+  /* ================= PORTAL ACCESS (GOOGLE SHEET) ================= */
+
+  const API_URL = "https://script.google.com/macros/s/AKfycbzBdDqVNrdf0yqnrMpAbd7qbrBpuKmjxWzpbC1omEvea906yZ-63RKM5DF6bou4ttO3/exec";
+
+  function setupPortal(modal) {
+    const input = modal.querySelector(".password-input");
+    const button = modal.querySelector(".modal-btn");
+
+    // message d’erreur simple
+    let errorMsg = document.createElement("p");
+    errorMsg.style.color = "#b00020";
+    errorMsg.style.display = "none";
+    errorMsg.textContent = "Mot de passe invalide";
+    modal.querySelector(".modal-content").appendChild(errorMsg);
+
+    button.onclick = () => {
+      const pwd = input.value.trim();
+      if (!pwd) return;
+
+      button.disabled = true;
+
+      fetch(API_URL + "?password=" + encodeURIComponent(pwd))
+        .then(res => res.json())
+        .then(data => {
+          if (data.url) {
+            window.open(data.url, "_blank");
+            modal.style.display = "none";
+            input.value = "";
+            errorMsg.style.display = "none";
+          } else {
+            errorMsg.style.display = "block";
+          }
+        })
+        .catch(() => {
+          errorMsg.style.display = "block";
+        })
+        .finally(() => {
+          button.disabled = false;
+        });
+    };
+
+    // touche Entrée
+    input.addEventListener("keypress", e => {
+      if (e.key === "Enter") button.click();
+    });
+  }
+
+  // Initialisation FR / EN
+  setupPortal(document.getElementById("portalModal"));
+  setupPortal(document.getElementById("portalModalEn"));
+</script>
 
 </body>
 </html>
