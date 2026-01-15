@@ -508,6 +508,8 @@
   const API_URL = "https://script.google.com/macros/s/AKfycbzBdDqVNrdf0yqnrMpAbd7qbrBpuKmjxWzpbC1omEvea906yZ-63RKM5DF6bou4ttO3/exec";
 
   function setupPortal(modal) {
+    if (!modal) return;
+
     const input = modal.querySelector(".password-input");
     const button = modal.querySelector(".modal-btn");
 
@@ -527,7 +529,9 @@
       fetch(API_URL + "?password=" + encodeURIComponent(pwd))
         .then(res => res.json())
         .then(data => {
-          if (data.url) {
+          console.log("API response:", data); // 🔍 debug
+
+          if (data && typeof data === "object" && data.url) {
             window.open(data.url, "_blank");
             modal.style.display = "none";
             input.value = "";
@@ -536,7 +540,8 @@
             errorMsg.style.display = "block";
           }
         })
-        .catch(() => {
+        .catch(err => {
+          console.error("API error:", err);
           errorMsg.style.display = "block";
         })
         .finally(() => {
@@ -545,7 +550,7 @@
     };
 
     // touche Entrée
-    input.addEventListener("keypress", e => {
+    input.addEventListener("keydown", e => {
       if (e.key === "Enter") button.click();
     });
   }
