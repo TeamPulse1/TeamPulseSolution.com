@@ -503,61 +503,26 @@
   setLanguage("fr");
 </script>
 <script>
-  /* ================= PORTAL ACCESS (GOOGLE SHEET) ================= */
+  /* ================= SIMPLE PORTAL (LOCAL) ================= */
+  /* Case-sensitive passwords (majuscule/minuscule respectées) */
 
-  const API_URL = "https://script.google.com/macros/s/AKfycbzBdDqVNrdf0yqnrMpAbd7qbrBpuKmjxWzpbC1omEvea906yZ-63RKM5DF6bou4ttO3/exec";
+  const PASSWORD_MAP = {
+    "CLIENTA2026": "https://forms.office.com/Pages/ResponsePage.aspx?id=XXXX",
+    "ClientB2026": "https://forms.office.com/Pages/ResponsePage.aspx?id=YYYY",
+    "demoTest":    "https://forms.office.com/Pages/ResponsePage.aspx?id=ZZZZ"
+  };
 
-  function setupPortal(modal) {
-    if (!modal) return;
+  function openFormFromPassword(inputId, errorId) {
+    const pwd = document.getElementById(inputId).value;
 
-    const input = modal.querySelector(".password-input");
-    const button = modal.querySelector(".modal-btn");
-
-    // message d’erreur simple
-    let errorMsg = document.createElement("p");
-    errorMsg.style.color = "#b00020";
-    errorMsg.style.display = "none";
-    errorMsg.textContent = "Mot de passe invalide";
-    modal.querySelector(".modal-content").appendChild(errorMsg);
-
-    button.onclick = () => {
-      const pwd = input.value.trim();
-      if (!pwd) return;
-
-      button.disabled = true;
-
-      fetch(API_URL + "?password=" + encodeURIComponent(pwd))
-        .then(res => res.json())
-        .then(data => {
-          console.log("API response:", data); // 🔍 debug
-
-          if (data && typeof data === "object" && data.url) {
-            window.open(data.url, "_blank");
-            modal.style.display = "none";
-            input.value = "";
-            errorMsg.style.display = "none";
-          } else {
-            errorMsg.style.display = "block";
-          }
-        })
-        .catch(err => {
-          console.error("API error:", err);
-          errorMsg.style.display = "block";
-        })
-        .finally(() => {
-          button.disabled = false;
-        });
-    };
-
-    // touche Entrée
-    input.addEventListener("keydown", e => {
-      if (e.key === "Enter") button.click();
-    });
+    // ⚠️ PAS de .toLowerCase(), PAS de normalisation
+    // → comparaison STRICTE = case-sensitive
+    if (PASSWORD_MAP[pwd]) {
+      window.location.href = PASSWORD_MAP[pwd];
+    } else {
+      document.getElementById(errorId).style.display = "block";
+    }
   }
-
-  // Initialisation FR / EN
-  setupPortal(document.getElementById("portalModal"));
-  setupPortal(document.getElementById("portalModalEn"));
 </script>
 
 </body>
