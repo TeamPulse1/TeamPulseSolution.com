@@ -208,12 +208,13 @@
     .password-input {
       width: 100%;
       max-width: 300px;
-      margin: 0 auto 1.5rem;
+      margin: 0 auto 1.0rem;
       display: block;
       padding: 0.75rem;
       border-radius: 8px;
       border: 2px solid var(--vert);
       text-align: center;
+      font-size: 1rem;
     }
 
     .modal-btn {
@@ -224,6 +225,7 @@
       padding: 0.6rem 1.6rem;
       border-radius: 8px;
       font-weight: 700;
+      cursor: pointer;
     }
 
     .modal-close {
@@ -234,6 +236,7 @@
       border: none;
       font-size: 1.4rem;
       color: var(--bleu-fonce);
+      cursor: pointer;
     }
 
     /* ================= FOOTER ================= */
@@ -259,33 +262,15 @@
 
     /* ================= MOBILE ================= */
     @media (max-width: 768px) {
-
       .logo-img { height: 64px; }
+      .questionnaire-link { height: 46px; padding: 0 1rem; }
 
-      .questionnaire-link {
-        height: 46px;
-        padding: 0 1rem;
-      }
+      header.hero { padding: 3.5rem 1.2rem; }
+      header.hero::before { filter: blur(3px) grayscale(35%) brightness(0.75); }
+      header.hero::after { background: rgba(29, 42, 98, 0.70); }
 
-      header.hero {
-        padding: 3.5rem 1.2rem;
-      }
-
-      header.hero::before {
-        filter: blur(3px) grayscale(35%) brightness(0.75);
-      }
-
-      header.hero::after {
-        background: rgba(29, 42, 98, 0.70);
-      }
-
-      header.hero h1 {
-        font-size: 2.3rem;
-      }
-
-      header.hero p {
-        font-size: 2.2rem;
-      }
+      header.hero h1 { font-size: 2.3rem; }
+      header.hero p { font-size: 2.2rem; }
     }
   </style>
 </head>
@@ -432,8 +417,20 @@
     <p>
       Pour avoir accès au <em>TeamPulse<sup>MC</sup></em>, veuillez saisir votre mot de passe :
     </p>
-    <input type="password" class="password-input" placeholder="Mot de passe">
-    <button class="modal-btn">Accéder</button>
+
+    <!-- Visible password input -->
+    <input type="text" id="portalPassword" class="password-input" placeholder="Mot de passe">
+
+    <button class="modal-btn" id="portalBtn">Accéder</button>
+
+    <p id="portalError" style="display:none; color:#b00020; margin-top: 0.8rem; font-weight: 700;">
+      Mot de passe invalide
+    </p>
+
+    <p id="portalLinkWrap" style="display:none; margin-top: 0.8rem;">
+      Vous êtes sur le point de prendre le pouls de votre équipe avec <em>TeamPulse<sup>MC</sup></em>.
+      <a id="portalLink" href="#" target="_blank" rel="noopener">Cliquer sur ce lien pour commencer.</a>
+    </p>
   </div>
 </div>
 
@@ -445,8 +442,21 @@
     <p>
       To access <em>TeamPulse<sup>TM</sup></em>, please enter your password:
     </p>
-    <input type="password" class="password-input" placeholder="Password">
-    <button class="modal-btn">Access</button>
+
+    <!-- Visible password input -->
+    <input type="text" id="portalPasswordEn" class="password-input" placeholder="Password">
+
+    <button class="modal-btn" id="portalBtnEn">Access</button>
+
+    <p id="portalErrorEn" style="display:none; color:#b00020; margin-top: 0.8rem; font-weight: 700;">
+      Invalid password
+    </p>
+
+    <p id="portalLinkWrapEn" style="display:none; margin-top: 0.8rem;">
+      You are about to take the pulse of your team with <em>TeamPulse<sup>TM</sup></em>.
+      <a id="portalLinkEn" href="#" target="_blank" rel="noopener">Click here to begin.</a>
+    </p>
+    </p>
   </div>
 </div>
 
@@ -455,7 +465,11 @@
   <p><strong><em>TeamPulse<sup>MC</sup></em> Solutions</strong></p>
   <p>📧 <a href="mailto:teampulsesolutions@stpginc.com">teampulsesolutions@stpginc.com</a></p>
   <img src="Logo STPG.png" class="footer-logo" alt="St-Pierre, Gauthier & Co. Inc.">
-  <p class="small">© St-Pierre, Gauthier & Co. Inc., 2026</p>
+  <p class="small">
+    © <a href="https://www.stpginc.com" target="_blank" rel="noopener noreferrer"
+       style="text-decoration: underline;">
+      St-Pierre, Gauthier & Co. Inc., 2026</a>
+  </p>
 </footer>
 
 <script>
@@ -502,27 +516,52 @@
 
   setLanguage("fr");
 </script>
+
 <script>
   /* ================= SIMPLE PORTAL (LOCAL) ================= */
   /* Case-sensitive passwords (majuscule/minuscule respectées) */
 
   const PASSWORD_MAP = {
-    "CLIENTA2026": "https://forms.office.com/Pages/ResponsePage.aspx?id=XXXX",
-    "ClientB2026": "https://forms.office.com/Pages/ResponsePage.aspx?id=YYYY",
+    "CLIENTA2026": "https://forms.office.com/Pages/ResponsePage.aspx?id=ITAP5ZBBzEu_uKnoMGSyr0JK15kVXFJAsMH35qCOQTpUN0NTWEsyRUdOUzBHWUVLMlFVOFhIN0U3TS4u",
+    "ClientB2026": "https://forms.office.com/Pages/ResponsePage.aspx?id=ITAP5ZBBzEu_uKnoMGSyr0JK15kVXFJAsMH35qCOQTpUN0NTWEsyRUdOUzBHWUVLMlFVOFhIN0U3TS4u",
     "demoTest":    "https://forms.office.com/Pages/ResponsePage.aspx?id=ZZZZ"
   };
 
-  function openFormFromPassword(inputId, errorId) {
-    const pwd = document.getElementById(inputId).value;
+  function handlePortal(inputId, errorId, linkWrapId, linkId) {
+    const input = document.getElementById(inputId);
+    const error = document.getElementById(errorId);
+    const linkWrap = document.getElementById(linkWrapId);
+    const link = document.getElementById(linkId);
 
-    // ⚠️ PAS de .toLowerCase(), PAS de normalisation
-    // → comparaison STRICTE = case-sensitive
+    // reset affichage
+    error.style.display = "none";
+    linkWrap.style.display = "none";
+
+    const pwd = input.value; // case-sensitive
+
     if (PASSWORD_MAP[pwd]) {
-      window.location.href = PASSWORD_MAP[pwd];
+      link.href = PASSWORD_MAP[pwd];
+      linkWrap.style.display = "block";
     } else {
-      document.getElementById(errorId).style.display = "block";
+      error.style.display = "block";
     }
   }
+
+  document.getElementById("portalBtn").addEventListener("click", () => {
+    handlePortal("portalPassword", "portalError", "portalLinkWrap", "portalLink");
+  });
+
+  document.getElementById("portalBtnEn").addEventListener("click", () => {
+    handlePortal("portalPasswordEn", "portalErrorEn", "portalLinkWrapEn", "portalLinkEn");
+  });
+
+  document.getElementById("portalPassword").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("portalBtn").click();
+  });
+
+  document.getElementById("portalPasswordEn").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("portalBtnEn").click();
+  });
 </script>
 
 </body>
