@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTFTop8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TeamPulse Solutions</title>
 
@@ -272,6 +272,51 @@
       header.hero h1 { font-size: 2.3rem; }
       header.hero p { font-size: 2.2rem; }
     }
+    /* ===== PUCE PERSONNALISÉES TeamPulse (AJOUT UNIQUE) ===== */
+
+/* On enlève les puces normales SEULEMENT dans ces sections */
+#definition .section-inner > ul,
+#mesures .section-inner ul,
+#pourquoi .section-inner ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Mise en forme des lignes */
+#definition .section-inner > ul > li,
+#mesures .section-inner ul > li,
+#pourquoi .section-inner ul > li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 0.6rem;
+}
+
+/* Puce (taille contrôlée) */
+#definition .section-inner > ul > li::before,
+#mesures .section-inner ul > li::before,
+#pourquoi .section-inner ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.22em;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+/* Couleur par section */
+#definition .section-inner > ul > li::before {
+  background-image: url("Puce_bleu_fonce.png");
+}
+
+#mesures .section-inner ul > li::before {
+  background-image: url("Puce_bleu_clair.png");
+}
+
+#pourquoi .section-inner ul > li::before {
+  background-image: url("Puce_vert.png");
+}
   </style>
 </head>
 
