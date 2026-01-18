@@ -317,6 +317,41 @@
 #pourquoi .section-inner ul > li::before {
   background-image: url("Puce_vert.png");
 }
+/* ================= HAMBURGER MENU ================= */
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--bleu-fonce);
+}
+
+/* ================= MOBILE NAV ================= */
+@media (max-width: 768px) {
+
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    gap: 1.2rem;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    display: none;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+}
   </style>
 </head>
 
@@ -326,7 +361,7 @@
 <nav class="topnav">
   <div class="nav-container">
     <img id="navLogo" src="TeamPulse_Logo_fr.png" class="logo-img" alt="TeamPulse Logo">
-
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">☰</button>
     <ul class="nav-links">
       <li>
         <a href="#" id="openPortal" class="questionnaire-link"
@@ -608,6 +643,23 @@
     if (e.key === "Enter") document.getElementById("portalBtnEn").click();
   });
 </script>
+<script>
+  const hamburgerBtn = document.getElementById("hamburgerBtn");
+  const navLinks = document.querySelector(".nav-links");
 
+  hamburgerBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+    hamburgerBtn.textContent =
+      navLinks.classList.contains("open") ? "✕" : "☰";
+  });
+
+  // Fermer le menu après clic sur un lien
+  document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+      navLinks.classList.remove("open");
+      hamburgerBtn.textContent = "☰";
+    });
+  });
+</script>
 </body>
 </html>
